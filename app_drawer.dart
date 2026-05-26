@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../screens/home_screen.dart';
-import '../screens/about_screen.dart';
-import '../screens/skills_screen.dart';
-import '../screens/projects_screen.dart';
-import '../screens/experience_screen.dart';
-import '../screens/education_screen.dart';
-import '../screens/contact_screen.dart';
+import 'package:job_seeker_portfolio/screens/about_screen.dart';
+import 'package:job_seeker_portfolio/screens/contact_screen.dart';
+import 'package:job_seeker_portfolio/screens/education_screen.dart';
+import 'package:job_seeker_portfolio/screens/experience_screen.dart';
+import 'package:job_seeker_portfolio/screens/projects_screen.dart';
+import 'package:job_seeker_portfolio/screens/skills_screen.dart';
+import 'home_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   /// Receives the profile image file from HomeScreen to keep the UI in sync.

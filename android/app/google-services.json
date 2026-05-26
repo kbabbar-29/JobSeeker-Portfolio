@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "540129529785",
+    "project_id": "job-seeker-portfolio",
+    "storage_bucket": "job-seeker-portfolio.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540129529785:android:2fb490d1f0bf6b5b0e3068",
+        "android_client_info": {
+          "package_name": "com.example.job_seeker_portfolio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2bhUElXKCGdSdg8le03KW14TxG8-r5vQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

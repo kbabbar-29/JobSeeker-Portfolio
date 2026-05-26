@@ -1,10 +1,11 @@
 import 'dart:io'; // Required for File handling
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // Ensure you added this to pubspec.yaml
-import '../widgets/app_drawer.dart';
-import '../widgets/responsive_container.dart';
-import 'projects_screen.dart';
-import 'contact_screen.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:job_seeker_portfolio/screens/contact_screen.dart';
+import 'package:job_seeker_portfolio/screens/projects_screen.dart';
+import 'package:job_seeker_portfolio/widgets/responsive_container.dart';
+
+import 'app_drawer.dart'; // Ensure you added this to pubspec.yaml
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

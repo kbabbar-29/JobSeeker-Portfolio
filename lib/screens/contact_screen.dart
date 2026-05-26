@@ -1,17 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../widgets/app_drawer.dart';
 import '../widgets/info_card.dart';
 import '../widgets/responsive_container.dart';
 
-class ContactScreen extends StatelessWidget {
+class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final messageController = TextEditingController();
+  State<ContactScreen> createState() => _ContactScreenState();
+}
 
+class _ContactScreenState extends State<ContactScreen> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController messageController = TextEditingController();
+
+  bool isLoading = false;
+
+  Future<void> submitMessage() async {
+    if (nameController.text.trim().isEmpty ||
+        emailController.text.trim().isEmpty ||
+        messageController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fill all fields."),
+        ),
+      );
+      return;
+    }
+
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      await FirebaseFirestore.instance
+          .collection('contact_messages')
+          .add({
+        'name': nameController.text.trim(),
+        'email': emailController.text.trim(),
+        'message': messageController.text.trim(),
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      // Clear fields after successful submission
+      nameController.clear();
+      emailController.clear();
+      messageController.clear();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Message submitted successfully."),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error: $e"),
+        ),
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    messageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Contact / Hire Me"),
@@ -20,7 +86,6 @@ class ContactScreen extends StatelessWidget {
       ),
       drawer: const AppDrawer(),
       body: SingleChildScrollView(
-        // padding: const EdgeInsets.all(20),
         child: ResponsiveContainer(
           child: Column(
             children: [
@@ -40,7 +105,9 @@ class ContactScreen extends StatelessWidget {
                 description:
                 "Available for remote, hybrid, and on-site software roles.",
               ),
+
               const SizedBox(height: 10),
+
               Card(
                 elevation: 6,
                 shape: RoundedRectangleBorder(
@@ -52,10 +119,14 @@ class ContactScreen extends StatelessWidget {
                     children: [
                       const Text(
                         "Send a Message",
-                        style:
-                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+
                       const SizedBox(height: 16),
+
                       TextField(
                         controller: nameController,
                         decoration: const InputDecoration(
@@ -63,7 +134,9 @@ class ContactScreen extends StatelessWidget {
                           border: OutlineInputBorder(),
                         ),
                       ),
+
                       const SizedBox(height: 12),
+
                       TextField(
                         controller: emailController,
                         decoration: const InputDecoration(
@@ -71,7 +144,9 @@ class ContactScreen extends StatelessWidget {
                           border: OutlineInputBorder(),
                         ),
                       ),
+
                       const SizedBox(height: 12),
+
                       TextField(
                         controller: messageController,
                         maxLines: 4,
@@ -80,20 +155,27 @@ class ContactScreen extends StatelessWidget {
                           border: OutlineInputBorder(),
                         ),
                       ),
+
                       const SizedBox(height: 16),
+
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content:
-                                Text("Message submitted successfully."),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.send),
-                          label: const Text("Submit Message"),
+                          onPressed: isLoading ? null : submitMessage,
+                          icon: isLoading
+                              ? const SizedBox(
+                            height: 18,
+                            width: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                              : const Icon(Icons.send),
+                          label: Text(
+                            isLoading
+                                ? "Submitting..."
+                                : "Submit Message",
+                          ),
                         ),
                       ),
                     ],
